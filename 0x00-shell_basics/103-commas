@@ -1,3 +1,4 @@
 #!/bin/bash
-ls -a | grep -E '^[0-9a-zA-Z]' | sort -d | sed -E -e 's#(.*)#/&#' | tr '\n' ','
+ls -a1 | awk '/^[0-9a-zA-Z]/ { printf "%s%s,", ($0 ~ /^[.]{1,2}$/ ? "\n" : $0), ($0 ~ /^[.]{1,2}$/ ? "" : "/") } END { print "" }'
+
 
