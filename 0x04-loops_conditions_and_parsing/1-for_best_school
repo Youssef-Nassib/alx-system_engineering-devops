@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+#this shell script display Best scholl 10 times
+
+
+for (( i=0; i < 10; i++))
+do
+      echo "Best school"
+done
