@@ -1,1 +1,1 @@
-configuration management
+this is a readme file
