@@ -1,6 +1,6 @@
-#kill me now
+#killme 
 
 exec { 'kill killmenow process':
-  command => 'pkill -f killmenow',
-  onlyif  => 'pgrep -f killmenow',
+  command => '/usr/bin/pkill -f killmenow',
+  onlyif  => '/usr/bin/pgrep -f killmenow',
 }
