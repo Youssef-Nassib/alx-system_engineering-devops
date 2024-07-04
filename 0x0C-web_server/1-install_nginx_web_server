@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Configures a new ubuntu machine by installing nginx
-
+# Configures a new ubuntu machine by installing
+# Nginx where it should be listening on port 80
+# Serve a page that would return a Hello World string
+#
 
 echo -e "Updating and installing Nginx.\n"
 sudo apt-get update -y -qq && \
@@ -8,10 +10,10 @@ sudo apt-get update -y -qq && \
 
 echo -e "\nSetting up some minor stuff.\n"
 
-# start nginx service
+# starting nginx service
 sudo service nginx start
 
-# allow nginx on firewall
+# allowing nginx on firewall
 sudo ufw allow 'Nginx HTTP'
 
 # Give the user ownership to website files for easy editing
