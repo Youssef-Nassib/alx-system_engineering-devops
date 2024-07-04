@@ -10,10 +10,30 @@ sudo apt-get install nginx -y
 # Create a custom index.html with "Hello World!" message
 echo "Hello World!" | sudo tee /var/www/html/index.html
 
+# Check if Nginx is installed and listening on port 80
+nginx_installed=$(dpkg -l | grep nginx)
+if [[ -z $nginx_installed ]]; then
+  echo "Nginx installation failed"
+  exit 1
+fi
+
 # Ensure nginx is listening on port 80 (default configuration)
+sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
 
 # Reload nginx to apply changes (without using systemctl)
 sudo service nginx restart
 
-# Confirm nginx is running and configured correctly
-curl -s localhost | grep "Hello World!"
+# Ensure nginx is running and configured correctly
+status_code=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost)
+if [[ $status_code -ne 200 ]]; then
+  echo "Nginx is not returning 200 OK status"
+  exit 1
+fi
+
+response=$(curl -s localhost)
+if [[ $response != "Hello World!" ]]; then
+  echo "Nginx did not return the expected 'Hello World!' response"
+  exit 1
+fi
+
+echo "Nginx is installed and configured correctly"
