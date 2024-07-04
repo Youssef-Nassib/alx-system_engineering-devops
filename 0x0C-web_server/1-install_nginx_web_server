@@ -1,32 +1,19 @@
 #!/usr/bin/env bash
-# Configures a new ubuntu machine by installing
-# Nginx where it should be listening on port 80
-# Serve a page that would return a Hello World string
-#
+# This script installs Nginx on an Ubuntu server, configures it to serve a page with "Hello World!" at the root URL, and ensures it is running on port 80.
 
-echo -e "Updating and installing Nginx.\n"
-sudo apt-get update -y -qq && \
-	 sudo apt-get install nginx -y
+# Update package lists
+sudo apt-get update -y
 
-echo -e "\nSetting up some minor stuff.\n"
+# Install nginx
+sudo apt-get install nginx -y
 
-# starting nginx service
-sudo service nginx start
+# Create a custom index.html with "Hello World!" message
+echo "Hello World!" | sudo tee /var/www/html/index.html
 
-# allowing nginx on firewall
-sudo ufw allow 'Nginx HTTP'
+# Ensure nginx is listening on port 80 (default configuration)
 
-# Give the user ownership to website files for easy editing
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chmod -R 755 /var/www
-
-# Backup default index
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
-
-# Creating new index
-echo -e "Hello World!" | dd status=none of=/var/www/html/index.nginx-debian.html
-
-# Restarting nginx
+# Reload nginx to apply changes (without using systemctl)
 sudo service nginx restart
 
-echo -e "\nCompleted. ✅\n"
+# Confirm nginx is running and configured correctly
+curl -s localhost | grep "Hello World!"
