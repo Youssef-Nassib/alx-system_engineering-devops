@@ -1,21 +1,34 @@
 #!/usr/bin/env bash
-# configures a new HAproxy as a load balancer
+# Configures a new HAproxy as a load balancer
 
-# Install HAproxy on a server
-apt-get -y update
-apt-get -y install haproxy=1.6.\*
+# Exit immediately if a command exits with a non-zero status
+set -e
 
-# Configure haproxy configuration file to distribute requests using a roundrobin algorithm
-echo '
-frontend sammykingx.tech
-        bind 0:80
-        default_backend web_servers
+# Update the package list and install a specific version of HAproxy
+apt-get update -y
+apt-get install -y haproxy=1.6.\*
+
+# Backup the original HAproxy configuration file
+cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+
+# Configure HAproxy to distribute requests using a round-robin algorithm
+cat <<EOL >> /etc/haproxy/haproxy.cfg
+
+frontend sammykingx_tech
+    bind 0.0.0.0:80
+    default_backend web_servers
 
 backend web_servers
-        balance roundrobin
-        server 512165-web-01 54.234.95.86:80
-        server 512165-web-02 3.85.33.66:80
-' >> /etc/haproxy/haproxy.cfg
+    balance roundrobin
+    server 512165-web-01 54.234.95.86:80 check
+    server 512165-web-02 3.85.33.66:80 check
+EOL
 
-# Restart HAproxy service
-service haproxy restart
+# Restart the HAproxy service to apply the new configuration
+systemctl restart haproxy
+
+# Enable HAproxy service to start on boot
+systemctl enable haproxy
+
+# Check the status of HAproxy to ensure it's running correctly
+systemctl status haproxy
