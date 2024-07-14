@@ -1,53 +1,9 @@
 #!/usr/bin/env bash
-# This script installs Nginx on an Ubuntu server, configures it to serve a page with "Hello World!" at the root URL, and ensures it is running on port 80.
+# servers are the piece of software generating and serving HTML pages
+# installing nginx on the web-01
 
-# Update package lists
-echo "Updating package lists..."
-sudo apt-get update -y
-
-# Install nginx
-echo "Installing Nginx..."
-sudo apt-get install nginx -y
-
-# Check if Nginx is installed
-nginx_installed=$(dpkg -l | grep nginx)
-if [[ -z $nginx_installed ]]; then
-  echo "Nginx installation failed"
-  exit 1
-else
-  echo "Nginx installed successfully"
-fi
-
-# Create a custom index.html with "Hello World!" message
-echo "Creating custom index.html..."
-echo "Hello World!" | sudo tee /var/www/html/index.html
-
-# Ensure nginx is listening on port 80 (default configuration)
-echo "Configuring Nginx to listen on port 80..."
-sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
-
-# Reload nginx to apply changes (without using systemctl)
-echo "Restarting Nginx..."
-sudo service nginx restart
-
-# Ensure nginx is running and configured correctly
-echo "Checking Nginx status code..."
-status_code=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost)
-if [[ $status_code -ne 200 ]]; then
-  echo "Nginx is not returning 200 OK status"
-  exit 1
-else
-  echo "Nginx is returning 200 OK status"
-fi
-
-echo "Checking Nginx response content..."
-response=$(curl -s http://localhost)
-if [[ $response != "Hello World!" ]]; then
-  echo "Nginx did not return the expected 'Hello World!' response"
-  echo "Actual response: $response"
-  exit 1
-else
-  echo "Nginx returned the expected 'Hello World!' response"
-fi
-
-echo "Nginx is installed and configured correctly"
+apt-get update -y
+apt-get install nginx -y
+sudo ufw allow 'Nginx HTTP'
+sh -c 'echo "Hello World!" > /var/www/html/index.html' 
+service nginx restart
