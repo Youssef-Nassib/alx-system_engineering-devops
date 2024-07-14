@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 # install load balancer
 
+# Update package lists and install HAProxy
 sudo apt-get -y update
 sudo apt-get -y install haproxy
-sudo chown $USER:USER /etc/haproxy/haproxy.cfg
 
+# Set correct ownership of haproxy.cfg
+sudo chown haproxy:haproxy /etc/haproxy/haproxy.cfg
+
+# Append HAProxy configuration to haproxy.cfg
 echo "
 frontend cryptotechcoder
     bind *:80
@@ -13,7 +17,8 @@ frontend cryptotechcoder
 
 backend app
     balance roundrobin
-    server 512165-web-01 34.229.186.172 check
-    server 512165-web-02 54.174.69.12:80 check" >> /etc/haproxy/haproxy.cfg
+    server 512165-web-01 34.229.186.172:80 check
+    server 512165-web-02 54.174.69.12:80 check" | sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null
 
+# Restart HAProxy service to apply configuration changes
 sudo service haproxy restart
