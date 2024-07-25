@@ -35,13 +35,13 @@ defaults
     errorfile 503 /etc/haproxy/errors/503.http
     errorfile 504 /etc/haproxy/errors/504.http
 
-frontend cryptotechcoder
+frontend joess
     bind *:80
-    bind *:443 ssl crt /etc/letsencrypt/live/www.joess.tech/joesskey.pem
+    bind *:443 ssl crt /etc/letsencrypt/live/www.joess.tech/joess.pem
     mode http
     default_backend app
 
 backend app
     balance roundrobin
-    server 512165-web-01 34.229.186.172:80 check
-    server 512165-web-02 54.174.69.12:80 check
+    server 512165-web-01 18.234.249.140:80 check
+    server 512165-web-02 3.80.18.45:80 check
