@@ -28,7 +28,8 @@ Corrective and Preventative Measures:
 
 Improvements:
 
-Code Review: Implement more rigorous code review practices, especially for critical components like session management.
+Code Review: Implement more rigorous code review practices, especially for critical components like session manage![image](https://github.com/user-attachments/assets/80801cc9-4b2b-40c5-b5f7-aa7d80523c3d)
+ment.
 Automated Testing: Enhance automated tests to cover edge cases and stress-test memory management.
 Monitoring: Improve memory usage monitoring with real-time alerts for abnormal memory growth patterns.
 Tasks:
