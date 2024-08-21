@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Fetch the PID of the Gunicorn master process
+GUNICORN_PID=$(pgrep -f 'gunicorn.*--bind 0.0.0.0:5003')
+
+# If Gunicorn master process exists, send the HUP signal to reload
+if [ -n "$GUNICORN_PID" ]; then
+    echo "Reloading Gunicorn master process (PID: $GUNICORN_PID)..."
+    kill -HUP "$GUNICORN_PID"
+    echo "Reload signal sent to Gunicorn master process."
+else
+    echo "Gunicorn master process not found. Make sure it's running."
+fi
